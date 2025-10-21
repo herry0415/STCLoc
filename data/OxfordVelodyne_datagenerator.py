@@ -9,8 +9,8 @@ from data.robotcar_sdk.python.interpolate_poses import interpolate_ins_poses, in
 from data.robotcar_sdk.python.transform import build_se3_transform
 from data.robotcar_sdk.python.velodyne import load_velodyne_binary
 from torch.utils import data
-from utils.pose_util import process_poses, ds_pc, filter_overflow_ts, position_classification, orientation_classification
-from copy import deepcopy
+from utils.pose_util import process_poses, ds_pc, filter_overflow_ts, position_classification, orientation_classification #todo 多了几个引入的函数
+from copy import deepcopy 
 
 
 BASE_DIR = osp.dirname(osp.abspath(__file__))
@@ -18,7 +18,7 @@ BASE_DIR = osp.dirname(osp.abspath(__file__))
 
 class RobotCar(data.Dataset):
     def __init__(self, data_path, train=True, valid=False, augmentation=[], num_points=4096, real=False,
-                 vo_lib='stereo', num_loc=10, num_ang=10):
+                 vo_lib='stereo', num_loc=10, num_ang=10): #todo 参数多了两个
         # directories
         lidar = 'velodyne_left'
         data_dir = osp.join(data_path, 'Oxford')
@@ -37,6 +37,7 @@ class RobotCar(data.Dataset):
         ps = {}
         ts = {}
         vo_stats = {}
+        # pcs_all = []
         self.pcs = []
         # extrinsic reading
         with open(os.path.join(extrinsics_dir, lidar + '.txt')) as extrinsics_file:
@@ -109,6 +110,7 @@ class RobotCar(data.Dataset):
         self.poses     = np.empty((0, 6))
         self.poses_max = np.empty((0, 2))
         self.poses_min = np.empty((0, 2))   
+        # poses_all = np.empty((0, 6))
         pose_max_min_filename = osp.join(data_dir, 'pose_max_min.txt')
 
         for seq in seqs:
@@ -130,17 +132,17 @@ class RobotCar(data.Dataset):
 
         self.augmentation = augmentation
         self.num_points   = num_points
-        self.num_loc = num_loc
-        self.num_ang = num_ang
+        self.num_loc = num_loc   #todo 新增参数
+        self.num_ang = num_ang   #todo 新增参数
         
         if train:
             print("train data num:" + str(len(self.poses)))
-            print("train position classification num:" + str(self.num_loc * self.num_loc))
-            print("train orientation classification num:" + str(self.num_ang))
+            print("train position classification num:" + str(self.num_loc * self.num_loc)) #todo
+            print("train orientation classification num:" + str(self.num_ang)) #todo
         else:
             print("valid data num:" + str(len(self.poses)))
-            print("valid position classification num:" + str(self.num_loc * self.num_loc))
-            print("valid orientation classification num:" + str(self.num_ang))
+            print("valid position classification num:" + str(self.num_loc * self.num_loc)) #todo
+            print("valid orientation classification num:" + str(self.num_ang)) #todo
 
     def __getitem__(self, index):             
         scan_path = self.pcs[index]
@@ -152,8 +154,8 @@ class RobotCar(data.Dataset):
             scan = a.apply(scan) 
             
         pose = self.poses[index]  # (6,)  
-        loc  = position_classification(pose, self.poses_max, self.poses_min, self.num_loc)  # (1, )
-        ang  = orientation_classification(pose, self.num_ang)  # (1, )
+        loc  = position_classification(pose, self.poses_max, self.poses_min, self.num_loc)  # (1, ) #Todo 新增
+        ang  = orientation_classification(pose, self.num_ang)  # (1, ) #todo新增
 
         return scan, pose, loc, ang
 

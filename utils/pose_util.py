@@ -6,6 +6,41 @@ import transforms3d.quaternions as txq
 import transforms3d.euler as txe
 from os import path as osp
 
+def poses_to_matrices(pose_array):
+    """
+    将 pose 数组转换为齐次位姿矩阵
+    Args:
+        pose_array: (N, 8) [time, x, y, z, qx, qy, qz, qw]
+    Returns:
+        T_all: (N, 4, 4) 齐次位姿矩阵
+    """
+    # 拆分位置和四元数
+    xyz = pose_array[:, 1:4]   # (N, 3)
+    quat = pose_array[:, 4:8]  # (N, 4) [qx, qy, qz, qw]
+
+    # 提取分量
+    qx, qy, qz, qw = quat[:, 0], quat[:, 1], quat[:, 2], quat[:, 3]
+
+    # 归一化（避免数值误差）
+    norm = np.linalg.norm(quat, axis=1, keepdims=True)
+    qx, qy, qz, qw = (quat / norm).T  
+
+    # 四元数 → 旋转矩阵，批量公式
+    R = np.stack([
+        1 - 2*(qy**2 + qz**2),  2*(qx*qy - qz*qw),  2*(qx*qz + qy*qw),
+        2*(qx*qy + qz*qw),  1 - 2*(qx**2 + qz**2),  2*(qy*qz - qx*qw),
+        2*(qx*qz - qy*qw),  2*(qy*qz + qx*qw),  1 - 2*(qx**2 + qy**2)
+    ], axis=1).reshape(-1, 3, 3)   # (N, 3, 3)
+
+    # 平移向量
+    t = xyz.reshape(-1, 3, 1)  # (N, 3, 1)
+
+    # 拼成 4×4
+    T_all = np.tile(np.eye(4), (pose_array.shape[0], 1, 1))  # (N, 4, 4)
+    T_all[:, :3, :3] = R
+    T_all[:, :3, 3:] = t
+
+    return T_all
 
 def qlog(q):
     if all(q[1:] == 0):

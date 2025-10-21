@@ -7,7 +7,8 @@ sys.path.insert(0, '../')
 from .vReLoc_datagenerator import vReLoc
 from .OxfordVelodyne_datagenerator import RobotCar
 from utils.pose_util import calc_vos_simple
-
+# from .hercules_lidar import Hercules #todo change lidar/radar
+from data.hercules_radar import Hercules #todo change
 
 class MF(data.Dataset):
     def __init__(self, dataset, include_vos=False, no_duplicates=False, *args, **kwargs):
@@ -29,6 +30,10 @@ class MF(data.Dataset):
             self.dset = RobotCar(*args, real=self.real, **kwargs)
             if self.include_vos and self.real:
                 self.gt_dset = RobotCar(*args, skip_pcs=True, real=False, **kwargs)
+        elif dataset == 'Hercules':  #todo change lidar/radar
+            self.dset = Hercules(*args, real=self.real, **kwargs)
+            if self.include_vos and self.real:
+                self.gt_dset = Hercules(*args, skip_pcs=True, real=False, **kwargs)
         else:
             raise NotImplementedError('{:s} dataset is not implemented!')
 
@@ -43,7 +48,8 @@ class MF(data.Dataset):
         offsets -= offsets[len(offsets) // 2]
         if self.no_duplicates:
             offsets += np.ceil(self.steps/2 * self.skip)
-        offsets = offsets.astype(np.int)
+        # offsets = offsets.astype(np.int) 
+        offsets = offsets.astype(int) #todo np.int 已弃用
         idx = index + offsets
         idx = np.minimum(np.maximum(idx, 0), len(self.dset)-1)
         assert np.all(idx >= 0), '{:d}'.format(index)
