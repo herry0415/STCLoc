@@ -1,7 +1,7 @@
 # pylint: disable=no-member
 import argparse
 import os
-import re
+import re #todo
 os.environ["CUDA_VISIBLE_DEVICES"] = '0' #todo
 import sys
 import numpy as np
@@ -15,8 +15,6 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from data.OxfordVelodyne_datagenerator import RobotCar
 from data.vReLoc_datagenerator import vReLoc
-# from data.hercules_lidar import Hercules #todo change
-from data.hercules_radar import Hercules #todo change
 from data.composition import MF
 from data.augment import get_augmentations_from_list, Normalize
 from models.model import STCLoc
@@ -55,7 +53,7 @@ parser.add_argument('--num_loc', type=int, default=10,
 parser.add_argument('--num_ang', type=int, default=10, 
                     help='orientation classification, default: 10')
 parser.add_argument('--skip', type=int, default=2, 
-                    help='Number of frames to skip')
+                    help='Number of frames to skip') #todo
 parser.add_argument('--steps', type=int, default=3, 
                     help='Number of frames to return on every call')
 parser.add_argument('--normalize', action='store_true', default=False,

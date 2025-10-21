@@ -1,8 +1,8 @@
 # pylint: disable=no-member
 import argparse
 import os
-import re
 os.environ["CUDA_VISIBLE_DEVICES"] = '1' #todo
+import re #todo 
 import sys
 import numpy as np
 import random
@@ -15,8 +15,6 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from data.OxfordVelodyne_datagenerator import RobotCar
 from data.vReLoc_datagenerator import vReLoc
-from data.hercules_lidar import Hercules #todo change
-# from data.hercules_radar import Hercules #todo change
 from data.composition import MF
 from data.augment import get_augmentations_from_list, Normalize
 from models.model import STCLoc
@@ -25,6 +23,7 @@ from tensorboardX import SummaryWriter
 from torch.backends import cudnn
 from torch.utils.data import DataLoader
 from os import path as osp
+
 
 SEQUENCE_NAME = 'Sports' #['Library', 'Mountain', 'Sports'] #todo
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -55,7 +54,7 @@ parser.add_argument('--num_loc', type=int, default=10,
 parser.add_argument('--num_ang', type=int, default=10, 
                     help='orientation classification, default: 10')
 parser.add_argument('--skip', type=int, default=2, 
-                    help='Number of frames to skip')
+                    help='Number of frames to skip')  #todo 原本是default = 10
 parser.add_argument('--steps', type=int, default=3, 
                     help='Number of frames to return on every call')
 parser.add_argument('--normalize', action='store_true', default=False,
@@ -109,7 +108,6 @@ if FLAGS.normalize:
     elif FLAGS.dataset == 'Hercules': #todo change
         sequence_name = SEQUENCE_NAME
         stats_file = os.path.join(FLAGS.dataset_folder, sequence_name, sequence_name + '_lidar' + '_pose_stats.txt') #改为radar
-
     else:
         raise ValueError("dataset error!")
     stats = np.loadtxt(stats_file, dtype=np.float32)

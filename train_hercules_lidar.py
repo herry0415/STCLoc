@@ -15,8 +15,6 @@ import matplotlib.pyplot as plt
 from data.OxfordVelodyne_datagenerator import RobotCar
 from data.vReLoc_datagenerator import vReLoc
 from data.composition import MF
-from data.hercules_lidar import Hercules #todo change lidar/radar
-# from data.hercules_radar import Hercules #todo change
 from data.augment import get_augmentations_from_list, Normalize
 from models.model import STCLoc
 from models.loss import Criterion
@@ -68,7 +66,7 @@ parser.add_argument('--num_loc', type=int, default=10,
 parser.add_argument('--num_ang', type=int, default=10, 
                     help='orientation classification, default: 10')
 parser.add_argument('--skip', type=int, default=2, 
-                    help='Number of frames to skip')
+                    help='Number of frames to skip')#todo
 parser.add_argument('--steps', type=int, default=3, 
                     help='Number of frames to return on every call')
 parser.add_argument('--normalize', action='store_true', default=False,
