@@ -9,8 +9,8 @@
 参考`posepn++`的代码基础上https://github.com/herry0415/PosePN-series 加了一些东西--num_loc 10 --num_ang 10  可以分为四个部分进行修改
 - data.hercules_lidar.py // data.hercules_radar.py 数据集类加载 
 - data.composition 部分 
-- train_hercules_lidar.py //  python train_hercules_radar.py 训练文件
-- python eval_hercules_lidar.py //   python eval_hercules_radar.py 测试文件
+- train_hercules_lidar.py //  train_hercules_radar.py 训练文件
+- eval_hercules_lidar.py //   eval_hercules_radar.py 测试文件
 
 
 
