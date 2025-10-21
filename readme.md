@@ -14,9 +14,9 @@
 
 
 
-### tercules_lidar.py //  hercules_radar.py
+### hercules_lidar.py //  hercules_radar.py
 ----
-- 对着posepn++ train函数的todo部分改
+- 先把posepn++项目的数据集 文件复制一下然后对着该项目的`OxfordVelodyne_datagenerator.py` 函数的todo部分改
 - 数据集需要加几个参数  分区和分角度
 - 返回值由2个变为4个了
 
@@ -29,12 +29,12 @@
 
 ### train_hercules_lidar.py //  train_hercules_radar.py
 ----
-- 对着posepn++ eval函数的todo部分改
+- 先把该项目的`train.py` 文件复制一下 然后对着posepn++ train函数的todo部分改
 - `pcs_tensor                           = val_data.to(device, dtype=torch.float32) ` Radar 部分有问题 需要转换为torch.float32
 
 ### eval_hercules_lidar.py //   eval_hercules_radar.py
 ----
-- 对着posepn++ eval函数的todo部分改
+- 先把该项目的`test.py` 文件复制一下 然后对着posepn++ eval函数的todo部分改
 - 注意图片保存名字的后缀切换 `lidar / radar`  ctrl+f一下 lidar/radar
 
 **改完代码注意 注意检查**：
